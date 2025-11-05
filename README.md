@@ -2,6 +2,8 @@
 
 🚀 **Stealth intelligence network of AI agents that monitor whale wallet movements in the Axiom ecosystem**
 
+🔗 **Repository**: [https://github.com/Demerzels-lab/zkwhale-ai](https://github.com/Demerzels-lab/zkwhale-ai)
+
 ZKWhale.AI is a cutting-edge platform where users can deploy private AI agents to track whale wallet activities on Axiom, using Zero-Knowledge proofs for privacy and verifiable analytics.
 
 ## 🌟 Features
@@ -55,7 +57,7 @@ zkwhale-ai/
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/Demerzels-lab/zkwhale-ai.git
    cd zkwhale-ai
    ```
 
@@ -71,6 +73,14 @@ zkwhale-ai/
 
 4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🌐 Live Demo
+
+The website is configured for deployment on Vercel and includes:
+- Real-time AI agent feed
+- Wallet connection with RainbowKit
+- Agent deployment and management
+- ZK proof verification (mock implementation)
 
 ## 📱 Key Components
 
