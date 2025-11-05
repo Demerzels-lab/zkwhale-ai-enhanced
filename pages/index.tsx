@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { Link } from 'next/link'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { Bot, Shield, Zap } from 'lucide-react'
 import LiveFeed from '@/components/LiveFeed'
 import { useEffect, useState } from 'react'
@@ -88,89 +87,12 @@ export default function Home() {
               transition={{ delay: 0.9 }}
               className="flex justify-center"
             >
-              <ConnectButton.Custom>
-                {({
-                  account,
-                  chain,
-                  openAccountModal,
-                  openChainModal,
-                  openConnectModal,
-                  authenticationStatus,
-                  mounted,
-                }) => {
-                  const ready = mounted && authenticationStatus !== 'loading'
-                  const connected =
-                    ready &&
-                    account &&
-                    chain &&
-                    (!authenticationStatus ||
-                      authenticationStatus === 'authenticated')
-
-                  return (
-                    <div
-                      {...(!ready && {
-                        'aria-hidden': true,
-                        'style': {
-                          opacity: 0,
-                          pointerEvents: 'none',
-                          userSelect: 'none',
-                        },
-                      })}
-                    >
-                      {(() => {
-                        if (!connected) {
-                          return (
-                            <button
-                              onClick={openConnectModal}
-                              className="bg-white text-dark px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors shadow-lg"
-                            >
-                              Connect Wallet to Deploy Agent
-                            </button>
-                          )
-                        }
-
-                        if (chain.unsupported) {
-                          return (
-                            <button
-                              onClick={openChainModal}
-                              className="bg-red-500 text-white px-8 py-3 rounded-xl font-semibold hover:bg-red-600 transition-colors"
-                            >
-                              Wrong Network
-                            </button>
-                          )
-                        }
-
-                        return (
-                          <div className="flex space-x-4">
-                            <button
-                              onClick={openChainModal}
-                              className="bg-medium-gray text-text-gray px-4 py-2 rounded-lg hover:bg-light-gray transition-colors flex items-center space-x-2"
-                            >
-                              {chain.hasIcon && (
-                                <div
-                                  style={{
-                                    background: chain.iconUrl,
-                                    width: 12,
-                                    height: 12,
-                                    borderRadius: 999,
-                                  }}
-                                />
-                              )}
-                              <span>{chain.name}</span>
-                            </button>
-                            <button
-                              onClick={openAccountModal}
-                              className="bg-white text-dark px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                            >
-                              {account.displayName}
-                            </button>
-                          </div>
-                        )
-                      })()}
-                    </div>
-                  )
-                }}
-              </ConnectButton.Custom>
+              <Link
+                href="/create"
+                className="bg-white text-dark px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors shadow-lg"
+              >
+                Connect Wallet to Deploy Agent
+              </Link>
             </motion.div>
 
             <motion.div

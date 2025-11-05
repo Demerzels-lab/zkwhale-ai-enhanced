@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'next/link'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { ArrowLeft, Bot, Zap, Shield, AlertCircle, CheckCircle } from 'lucide-react'
 
 interface FormData {
@@ -23,7 +22,7 @@ export default function CreateAgent() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [newAgentId, setNewAgentId] = useState('')
-  const [isConnected, setIsConnected] = useState(false)
+  const [isConnected, setIsConnected] = useState(true) // Always connected for demo
 
   const tokenOptions = [
     'AXM', 'ETH', 'USDC', 'DAI', 'USDT', 'WBTC', 'LINK', 'UNI',
@@ -112,39 +111,6 @@ export default function CreateAgent() {
               <h2 className="text-xl font-semibold text-text-gray">Agent Configuration</h2>
             </div>
 
-            <ConnectButton.Custom>
-              {({
-                account,
-                chain,
-                openChainModal,
-                openConnectModal,
-                authenticationStatus,
-                mounted,
-              }) => {
-                const ready = mounted && authenticationStatus !== 'loading'
-                const connected = ready && account && chain && authenticationStatus === 'authenticated'
-
-                useEffect(() => {
-                  setIsConnected(connected)
-                }, [connected])
-
-                return (
-                  <div
-                    {...(!ready && {
-                      'aria-hidden': true,
-                      'style': { opacity: 0, pointerEvents: 'none', userSelect: 'none' },
-                    })}
-                  >
-                    {(() => {
-                      if (!connected) {
-                        return (
-                          <div className="text-center py-16">
-                            <Bot size={64} className="text-gray-600 mx-auto mb-4" />
-                            <h3 className="text-xl font-semibold text-text-gray mb-2">Connect Wallet Required</h3>
-                            <p className="text-gray-400 mb-6">Connect your wallet to deploy AI agents</p>
-                            <button
-                              onClick={openConnectModal}
-                              className="bg-white text-dark px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                             >
                               Connect Wallet
                             </button>
@@ -299,11 +265,6 @@ export default function CreateAgent() {
                           </button>
                         </form>
                       )
-                    })()}
-                  </div>
-                )
-              }}
-            </ConnectButton.Custom>
           </motion.div>
 
           {/* Success/Error Messages */}

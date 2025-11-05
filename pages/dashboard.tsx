@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'next/link'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { ArrowLeft, Filter, Bot, Plus } from 'lucide-react'
 import AgentCard from '@/components/AgentCard'
 import ProofModal from '@/components/ProofModal'
@@ -15,7 +14,7 @@ export default function Dashboard() {
   const [filter, setFilter] = useState<FilterType>('all')
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isConnected, setIsConnected] = useState(false)
+  const [isConnected, setIsConnected] = useState(true) // Always connected for demo
 
   useEffect(() => {
     // Fetch user agents
@@ -87,93 +86,15 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <ConnectButton.Custom>
-            {({
-              account,
-              chain,
-              openChainModal,
-              openConnectModal,
-              authenticationStatus,
-              mounted,
-            }) => {
-              const ready = mounted && authenticationStatus !== 'loading'
-              const connected = ready && account && chain && authenticationStatus === 'authenticated'
-
-              useEffect(() => {
-                setIsConnected(connected)
-              }, [connected])
-
-              return (
-                <div
-                  {...(!ready && {
-                    'aria-hidden': true,
-                    'style': { opacity: 0, pointerEvents: 'none', userSelect: 'none' },
-                  })}
-                >
-                  {(() => {
-                    if (!connected) {
-                      return (
-                        <button
-                          onClick={openConnectModal}
-                          className="bg-white text-dark px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-                        >
-                          Connect Wallet
-                        </button>
-                      )
-                    }
-
-                    if (chain.unsupported) {
-                      return (
-                        <button
-                          onClick={openChainModal}
-                          className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
-                        >
-                          Wrong Network
-                        </button>
-                      )
-                    }
-
-                    return (
-                      <div className="flex items-center space-x-2">
-                        <button
-                          onClick={openChainModal}
-                          className="bg-medium-gray text-text-gray px-3 py-2 rounded-lg hover:bg-light-gray transition-colors flex items-center space-x-1"
-                        >
-                          {chain.hasIcon && (
-                            <div
-                              style={{ background: chain.iconUrl, width: 12, height: 12, borderRadius: 999 }}
-                            />
-                          )}
-                          <span className="text-sm">{chain.name}</span>
-                        </button>
-                        <button
-                          onClick={openConnectModal}
-                          className="bg-white text-dark px-3 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors text-sm"
-                        >
-                          {account.displayName?.slice(0, 6)}...{account.displayName?.slice(-4)}
-                        </button>
-                      </div>
-                    )
-                  })()}
-                </div>
-              )
-            }}
-          </ConnectButton.Custom>
+          <Link
+            href="/create"
+            className="bg-white text-dark px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+          >
+            Deploy Agent
+          </Link>
         </div>
 
-        {!isConnected ? (
-          <div className="text-center py-16">
-            <Bot size={64} className="text-gray-600 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-text-gray mb-2">Connect Wallet to View Dashboard</h2>
-            <p className="text-gray-400 mb-6">Access your private AI agents and track whale movements</p>
-            <button
-              onClick={() => window.location.href = '/'}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Connect Wallet
-            </button>
-          </div>
-        ) : (
+        
           <>
             {/* Stats and Actions */}
             <div className="flex items-center justify-between mb-8">
@@ -264,8 +185,6 @@ export default function Dashboard() {
             onClose={() => setIsModalOpen(false)}
             agentId={selectedAgent.agentId}
             zkProof={selectedAgent.zkProof}
-          />
-        )}
       </div>
     </div>
   )
