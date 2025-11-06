@@ -1,21 +1,49 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { Agent, generateMockAgent } from '@/lib/agentsData'
-
-// In-memory store for demo
-let agents: Agent[] = []
+import { 
+  getAgents, 
+  getAgentStats, 
+  updateAgentActivity 
+} from '@/lib/agentsData'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    // Generate new agents periodically for demo
-    if (agents.length === 0 || Math.random() > 0.8) {
-      agents.push(generateMockAgent())
+    // Get all agents with stats
+    const agents = getAgents()
+    const stats = getAgentStats()
+    
+    res.status(200).json({
+      agents,
+      stats,
+      timestamp: new Date().toISOString()
+    })
+  } else if (req.method === 'POST') {
+    // Update agent activity (for real-time simulation)
+    const { agentId } = req.body
+    
+    if (agentId) {
+      const updatedAgent = updateAgentActivity(agentId)
+      
+      if (updatedAgent) {
+        res.status(200).json({
+          success: true,
+          agent: updatedAgent,
+          timestamp: new Date().toISOString()
+        })
+      } else {
+        res.status(404).json({
+          success: false,
+          error: 'Agent not found'
+        })
+      }
+    } else {
+      res.status(400).json({
+        success: false,
+        error: 'Agent ID is required'
+      })
     }
-    
-    // Keep only last 25 agents
-    agents = agents.slice(-25)
-    
-    res.status(200).json({ agents })
   } else {
-    res.status(405).json({ error: 'Method not allowed' })
+    res.status(405).json({
+      error: 'Method not allowed'
+    })
   }
 }
