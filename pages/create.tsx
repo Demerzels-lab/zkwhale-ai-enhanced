@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'next/link'
+import Link from 'next/link'
 import { ArrowLeft, Bot, Zap, Shield, AlertCircle, CheckCircle } from 'lucide-react'
 
 interface FormData {
@@ -22,7 +22,6 @@ export default function CreateAgent() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [newAgentId, setNewAgentId] = useState('')
-  const [isConnected, setIsConnected] = useState(true) // Always connected for demo
 
   const tokenOptions = [
     'AXM', 'ETH', 'USDC', 'DAI', 'USDT', 'WBTC', 'LINK', 'UNI',
@@ -47,13 +46,21 @@ export default function CreateAgent() {
     setIsSubmitting(true)
     setSubmitStatus('idle')
 
+    // Note: The original API uses 'protocol', 'threshold', 'timeframe'
+    // We are sending 'tokenToTrack' as 'protocol' to match the API
+    const deployData = {
+      protocol: formData.tokenToTrack,
+      threshold: formData.whaleThreshold,
+      timeframe: formData.timeFrame
+    }
+
     try {
       const response = await fetch('/api/deploy', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(deployData),
       })
 
       const result = await response.json()
@@ -111,160 +118,137 @@ export default function CreateAgent() {
               <h2 className="text-xl font-semibold text-text-gray">Agent Configuration</h2>
             </div>
 
-                            >
-                              Connect Wallet
-                            </button>
-                          </div>
-                        )
-                      }
+            {/* This is the new, cleaned-up form */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Agent Name */}
+              <div>
+                <label className="block text-sm font-medium text-text-gray mb-2">
+                  Agent Name (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={formData.agentName}
+                  onChange={(e) => handleInputChange('agentName', e.target.value)}
+                  placeholder="My Whale Tracker #1"
+                  className="w-full px-4 py-3 bg-medium-gray border border-gray-700 rounded-lg text-text-gray placeholder-gray-500 focus:border-blue-500 focus:outline-none transition-colors"
+                />
+              </div>
 
-                      if (chain.unsupported) {
-                        return (
-                          <div className="text-center py-16">
-                            <AlertCircle size={64} className="text-red-400 mx-auto mb-4" />
-                            <h3 className="text-xl font-semibold text-red-400 mb-2">Wrong Network</h3>
-                            <p className="text-gray-400 mb-6">Please switch to a supported network</p>
-                            <button
-                              onClick={openChainModal}
-                              className="bg-red-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-600 transition-colors"
-                            >
-                              Switch Network
-                            </button>
-                          </div>
-                        )
-                      }
+              {/* Token/Protocol to Track */}
+              <div>
+                <label className="block text-sm font-medium text-text-gray mb-2">
+                  Token/Protocol to Track *
+                </label>
+                <select
+                  value={formData.tokenToTrack}
+                  onChange={(e) => handleInputChange('tokenToTrack', e.target.value)}
+                  required
+                  className="w-full px-4 py-3 bg-medium-gray border border-gray-700 rounded-lg text-text-gray focus:border-blue-500 focus:outline-none transition-colors"
+                >
+                  <option value="">Select token or protocol...</option>
+                  {tokenOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                      return (
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                          {/* Agent Name */}
-                          <div>
-                            <label className="block text-sm font-medium text-text-gray mb-2">
-                              Agent Name (Optional)
-                            </label>
-                            <input
-                              type="text"
-                              value={formData.agentName}
-                              onChange={(e) => handleInputChange('agentName', e.target.value)}
-                              placeholder="My Whale Tracker #1"
-                              className="w-full px-4 py-3 bg-medium-gray border border-gray-700 rounded-lg text-text-gray placeholder-gray-500 focus:border-blue-500 focus:outline-none transition-colors"
-                            />
-                          </div>
+              {/* Whale Threshold */}
+              <div>
+                <label className="block text-sm font-medium text-text-gray mb-2">
+                  Whale Threshold *
+                </label>
+                <select
+                  value={formData.whaleThreshold}
+                  onChange={(e) => handleInputChange('whaleThreshold', e.target.value)}
+                  required
+                  className="w-full px-4 py-3 bg-medium-gray border border-gray-700 rounded-lg text-text-gray focus:border-blue-500 focus:outline-none transition-colors"
+                >
+                  <option value="">Select threshold...</option>
+                  {thresholdOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                          {/* Token/Protocol to Track */}
-                          <div>
-                            <label className="block text-sm font-medium text-text-gray mb-2">
-                              Token/Protocol to Track *
-                            </label>
-                            <select
-                              value={formData.tokenToTrack}
-                              onChange={(e) => handleInputChange('tokenToTrack', e.target.value)}
-                              required
-                              className="w-full px-4 py-3 bg-medium-gray border border-gray-700 rounded-lg text-text-gray focus:border-blue-500 focus:outline-none transition-colors"
-                            >
-                              <option value="">Select token or protocol...</option>
-                              {tokenOptions.map((option) => (
-                                <option key={option} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
+              {/* Time Frame */}
+              <div>
+                <label className="block text-sm font-medium text-text-gray mb-2">
+                  Time Frame *
+                </label>
+                <select
+                  value={formData.timeFrame}
+                  onChange={(e) => handleInputChange('timeFrame', e.target.value)}
+                  required
+                  className="w-full px-4 py-3 bg-medium-gray border border-gray-700 rounded-lg text-text-gray focus:border-blue-500 focus:outline-none transition-colors"
+                >
+                  <option value="">Select timeframe...</option>
+                  {timeFrameOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                          {/* Whale Threshold */}
-                          <div>
-                            <label className="block text-sm font-medium text-text-gray mb-2">
-                              Whale Threshold *
-                            </label>
-                            <select
-                              value={formData.whaleThreshold}
-                              onChange={(e) => handleInputChange('whaleThreshold', e.target.value)}
-                              required
-                              className="w-full px-4 py-3 bg-medium-gray border border-gray-700 rounded-lg text-text-gray focus:border-blue-500 focus:outline-none transition-colors"
-                            >
-                              <option value="">Select threshold...</option>
-                              {thresholdOptions.map((option) => (
-                                <option key={option} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
+              {/* Private Agent Toggle */}
+              <div className="flex items-center justify-between p-4 bg-medium-gray rounded-lg">
+                <div>
+                  <h4 className="text-sm font-medium text-text-gray">Private Agent</h4>
+                  <p className="text-xs text-gray-400">Only you can see this agent's data</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleInputChange('private', !formData.private)}
+                  className={`relative w-12 h-6 rounded-full transition-colors ${
+                    formData.private ? 'bg-blue-600' : 'bg-gray-600'
+                  }`}
+                >
+                  <div
+                    className={`absolute w-5 h-5 bg-white rounded-full top-0.5 transition-transform ${
+                      formData.private ? 'translate-x-6' : 'translate-x-0.5'
+                    }`}
+                  />
+                </button>
+              </div>
 
-                          {/* Time Frame */}
-                          <div>
-                            <label className="block text-sm font-medium text-text-gray mb-2">
-                              Time Frame *
-                            </label>
-                            <select
-                              value={formData.timeFrame}
-                              onChange={(e) => handleInputChange('timeFrame', e.target.value)}
-                              required
-                              className="w-full px-4 py-3 bg-medium-gray border border-gray-700 rounded-lg text-text-gray focus:border-blue-500 focus:outline-none transition-colors"
-                            >
-                              <option value="">Select timeframe...</option>
-                              {timeFrameOptions.map((option) => (
-                                <option key={option} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
+              {/* ZK Verification Notice */}
+              <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
+                <div className="flex items-start space-x-3">
+                  <Shield className="text-green-400 mt-1" size={16} />
+                  <div>
+                    <h4 className="text-sm font-medium text-green-400 mb-1">ZK Privacy Guarantee</h4>
+                    <p className="text-xs text-gray-400">
+                      All agent activities are protected with zero-knowledge proofs. 
+                      Your monitoring patterns remain private and untraceable.
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-                          {/* Private Agent Toggle */}
-                          <div className="flex items-center justify-between p-4 bg-medium-gray rounded-lg">
-                            <div>
-                              <h4 className="text-sm font-medium text-text-gray">Private Agent</h4>
-                              <p className="text-xs text-gray-400">Only you can see this agent's data</p>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => handleInputChange('private', !formData.private)}
-                              className={`relative w-12 h-6 rounded-full transition-colors ${
-                                formData.private ? 'bg-blue-600' : 'bg-gray-600'
-                              }`}
-                            >
-                              <div
-                                className={`absolute w-5 h-5 bg-white rounded-full top-0.5 transition-transform ${
-                                  formData.private ? 'translate-x-6' : 'translate-x-0.5'
-                                }`}
-                              />
-                            </button>
-                          </div>
-
-                          {/* ZK Verification Notice */}
-                          <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                            <div className="flex items-start space-x-3">
-                              <Shield className="text-green-400 mt-1" size={16} />
-                              <div>
-                                <h4 className="text-sm font-medium text-green-400 mb-1">ZK Privacy Guarantee</h4>
-                                <p className="text-xs text-gray-400">
-                                  All agent activities are protected with zero-knowledge proofs. 
-                                  Your monitoring patterns remain private and untraceable.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Submit Button */}
-                          <button
-                            type="submit"
-                            disabled={isSubmitting || !formData.tokenToTrack || !formData.whaleThreshold || !formData.timeFrame}
-                            className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors flex items-center justify-center space-x-2"
-                          >
-                            {isSubmitting ? (
-                              <>
-                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                <span>Deploying Agent...</span>
-                              </>
-                            ) : (
-                              <>
-                                <Bot size={18} />
-                                <span>Deploy AI Agent</span>
-                              </>
-                            )}
-                          </button>
-                        </form>
-                      )
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isSubmitting || !formData.tokenToTrack || !formData.whaleThreshold || !formData.timeFrame}
+                className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors flex items-center justify-center space-x-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Deploying Agent...</span>
+                  </>
+                ) : (
+                  <>
+                    <Bot size={18} />
+                    <span>Deploy AI Agent</span>
+                  </>
+                )}
+              </button>
+            </form>
+            
           </motion.div>
 
           {/* Success/Error Messages */}

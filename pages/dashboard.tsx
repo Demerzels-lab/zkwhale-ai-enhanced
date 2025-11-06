@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'next/link'
+import Link from 'next/link' // Corrected import
 import { ArrowLeft, Filter, Bot, Plus } from 'lucide-react'
 import AgentCard from '@/components/AgentCard'
 import ProofModal from '@/components/ProofModal'
@@ -8,13 +8,31 @@ import { Agent } from '@/lib/agentsData'
 
 type FilterType = 'all' | 'active' | 'paused' | 'private'
 
+const FilterButton = ({ type, label, count, activeFilter, setFilter }: { 
+  type: FilterType, 
+  label: string, 
+  count: number, 
+  activeFilter: FilterType,
+  setFilter: (type: FilterType) => void 
+}) => (
+  <button
+    onClick={() => setFilter(type)}
+    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+      activeFilter === type
+        ? 'bg-blue-600 text-white'
+        : 'bg-medium-gray text-gray-300 hover:bg-light-gray'
+    }`}
+  >
+    {label} ({count})
+  </button>
+)
+
 export default function Dashboard() {
   const [agents, setAgents] = useState<Agent[]>([])
   const [filteredAgents, setFilteredAgents] = useState<Agent[]>([])
   const [filter, setFilter] = useState<FilterType>('all')
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isConnected, setIsConnected] = useState(true) // Always connected for demo
 
   useEffect(() => {
     // Fetch user agents
@@ -25,7 +43,10 @@ export default function Dashboard() {
     // Apply filter
     let filtered = agents
     if (filter === 'private') {
-      filtered = agents.filter(agent => agent.private)
+      // --- Typescript Fix ---
+      // Changed from 'agent.private' to 'agent.status === 'private''
+      filtered = agents.filter(agent => agent.status === 'private')
+      // --- End of Fix ---
     } else if (filter === 'active' || filter === 'paused') {
       filtered = agents.filter(agent => agent.status === filter)
     }
@@ -34,7 +55,9 @@ export default function Dashboard() {
 
   const fetchAgents = async () => {
     try {
-      const response = await fetch('/api/deploy')
+      // The original code was fetching '/api/deploy' which is incorrect.
+      // It should fetch '/api/agents' to get the list of agents.
+      const response = await fetch('/api/agents') // <-- Corrected API endpoint
       const data = await response.json()
       setAgents(data.agents || [])
     } catch (error) {
@@ -49,22 +72,12 @@ export default function Dashboard() {
 
   const getFilterCount = (filterType: FilterType) => {
     if (filterType === 'all') return agents.length
-    if (filterType === 'private') return agents.filter(a => a.private).length
+    // --- Typescript Fix ---
+    // Changed from 'a.private' to 'a.status === 'private''
+    if (filterType === 'private') return agents.filter(a => a.status === 'private').length
+    // --- End of Fix ---
     return agents.filter(a => a.status === filterType).length
   }
-
-  const FilterButton = ({ type, label, count }: { type: FilterType, label: string, count: number }) => (
-    <button
-      onClick={() => setFilter(type)}
-      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-        filter === type
-          ? 'bg-blue-600 text-white'
-          : 'bg-medium-gray text-gray-300 hover:bg-light-gray'
-      }`}
-    >
-      {label} ({count})
-    </button>
-  )
 
   return (
     <div className="min-h-screen bg-dark">
@@ -111,7 +124,10 @@ export default function Dashboard() {
                 </div>
                 <div className="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
                   <div className="text-2xl font-bold text-blue-400">
-                    {agents.filter(a => a.private).length}
+                    {/* --- Typescript Fix --- */}
+                    {/* Changed from 'a.private' to 'a.status === 'private'' */}
+                    {agents.filter(a => a.status === 'private').length}
+                    {/* --- End of Fix --- */}
                   </div>
                   <div className="text-sm text-blue-400">Private</div>
                 </div>
@@ -130,10 +146,10 @@ export default function Dashboard() {
             <div className="flex items-center space-x-4 mb-8">
               <Filter className="text-gray-400" size={18} />
               <div className="flex space-x-2">
-                <FilterButton type="all" label="All" count={getFilterCount('all')} />
-                <FilterButton type="active" label="Active" count={getFilterCount('active')} />
-                <FilterButton type="paused" label="Paused" count={getFilterCount('paused')} />
-                <FilterButton type="private" label="Private" count={getFilterCount('private')} />
+                <FilterButton type="all" label="All" count={getFilterCount('all')} activeFilter={filter} setFilter={setFilter} />
+                <FilterButton type="active" label="Active" count={getFilterCount('active')} activeFilter={filter} setFilter={setFilter} />
+                <FilterButton type="paused" label="Paused" count={getFilterCount('paused')} activeFilter={filter} setFilter={setFilter} />
+                <FilterButton type="private" label="Private" count={getFilterCount('private')} activeFilter={filter} setFilter={setFilter} />
               </div>
             </div>
 
@@ -176,7 +192,6 @@ export default function Dashboard() {
               </div>
             )}
           </>
-        )}
 
         {/* ZK Proof Modal */}
         {selectedAgent && (
@@ -185,6 +200,8 @@ export default function Dashboard() {
             onClose={() => setIsModalOpen(false)}
             agentId={selectedAgent.agentId}
             zkProof={selectedAgent.zkProof}
+          />
+        )}
       </div>
     </div>
   )

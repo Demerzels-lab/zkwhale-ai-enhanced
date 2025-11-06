@@ -17,7 +17,6 @@ export interface Agent {
   }
 }
 
-// Agent templates for realistic whale tracking scenarios
 const agentTemplates = [
   {
     status: 'active',
@@ -75,7 +74,7 @@ const agentTemplates = [
     threats: ['Stealth operations'],
     proof: '0x890abcdef1234567890abcdef123456789'
   }
-]
+] as const; // <-- THIS IS THE FIX. It makes all properties (like 'status') read-only literals.
 
 // Generate random whale wallet addresses
 function generateWalletAddress(): string {
@@ -114,14 +113,14 @@ function initializeAgents() {
     const template = agentTemplates[Math.floor(Math.random() * agentTemplates.length)]
     agents.push({
       agentId: generateAgentId(),
-      status: template.status,
+      status: template.status, // <-- This line now works because template.status is typed correctly
       activity: template.activity,
       wallet: generateWalletAddress(),
       protocol: template.protocol,
       amount: generateAmount(),
       zkProof: template.proof,
       timestamp: new Date().toISOString(),
-      threats: template.threats,
+      threats: [...template.threats], // Use spread operator to make a new array
       threatLevel: Math.floor(Math.random() * 10) + 1,
       verificationStatus: Math.random() > 0.8 ? 'pending' : 'verified'
     })
@@ -143,7 +142,7 @@ export function createAgent(agentData: { protocol?: string; threshold?: string; 
   const template = agentTemplates[Math.floor(Math.random() * agentTemplates.length)]
   const newAgent: Agent = {
     agentId: generateAgentId(),
-    status: 'active',
+    status: 'active', // New agents are 'active' by default
     activity: `Monitoring ${agentData.protocol}`,
     wallet: generateWalletAddress(),
     protocol: agentData.protocol || 'Custom Protocol',
@@ -242,14 +241,14 @@ export const generateMockAgent = (userCreated = false): Agent => {
   const template = agentTemplates[Math.floor(Math.random() * agentTemplates.length)]
   return {
     agentId: generateAgentId(),
-    status: template.status,
+    status: template.status, // <-- This line is now also fixed
     activity: template.activity,
     wallet: generateWalletAddress(),
     protocol: template.protocol,
     amount: generateAmount(),
     zkProof: template.proof,
     timestamp: new Date().toISOString(),
-    threats: template.threats,
+    threats: [...template.threats], // Use spread operator
     threatLevel: Math.floor(Math.random() * 10) + 1,
     verificationStatus: Math.random() > 0.8 ? 'pending' : 'verified'
   }

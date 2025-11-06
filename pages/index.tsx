@@ -7,8 +7,8 @@ import LiveFeed from '../components/LiveFeed';
 
 export default function Home() {
   const [agents, setAgents] = useState([]);
-  const [stats, setStats] = useState({ total: 0, active: 0, paused: 0, private: 0 });
-  const [connectedWallet, setConnectedWallet] = useState(null);
+  const [stats, setStats] = useState({ total: 0, active: 0, paused: 0, private: 0, verified: 0, pending: 0 });
+  const [connectedWallet, setConnectedWallet] = useState<string | null>(null);
 
   // Fetch agents data
   useEffect(() => {
@@ -194,7 +194,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-8">
             <div>
               <h2 className="text-2xl font-bold text-monochrome-4 mb-6">Real-Time Intelligence</h2>
-              <LiveFeed agents={agents} />
+              <LiveFeed />
             </div>
             
             <div className="space-y-6">

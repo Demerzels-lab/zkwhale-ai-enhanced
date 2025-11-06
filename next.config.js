@@ -11,10 +11,6 @@ const nextConfig = {
   },
   // Ensure proper asset handling
   assetPrefix: process.env.NODE_ENV === 'production' ? '' : undefined,
-  // Optimize dependencies
-  experimental: {
-    optimizeCss: true,
-  },
   // Headers for better performance
   async headers() {
     return [

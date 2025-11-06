@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { CheckCircle, Clock, Shield, Eye } from 'lucide-react'
+import { CheckCircle, Clock, Shield, Eye, Lock } from 'lucide-react'
 import { Agent } from '@/lib/agentsData'
 
 interface AgentCardProps {
@@ -14,6 +14,7 @@ export default function AgentCard({ agent, onZKProof }: AgentCardProps) {
       case 'monitoring': return 'text-blue-400'
       case 'pending': return 'text-yellow-400'
       case 'paused': return 'text-gray-400'
+      case 'private': return 'text-purple-400'
       default: return 'text-gray-400'
     }
   }
@@ -24,6 +25,7 @@ export default function AgentCard({ agent, onZKProof }: AgentCardProps) {
       case 'monitoring': return <Eye size={16} />
       case 'pending': return <Clock size={16} />
       case 'paused': return <Clock size={16} />
+      case 'private': return <Lock size={16} />
       default: return <Clock size={16} />
     }
   }
@@ -41,12 +43,8 @@ export default function AgentCard({ agent, onZKProof }: AgentCardProps) {
             <span className="text-sm font-medium text-text-gray">
               Agent #{agent.agentId}
             </span>
-            {agent.userCreated && (
-              <span className="px-2 py-1 text-xs bg-blue-500/20 text-blue-400 rounded-full">
-                Created
-              </span>
-            )}
-            {agent.private && (
+            
+            {agent.status === 'private' && (
               <span className="px-2 py-1 text-xs bg-purple-500/20 text-purple-400 rounded-full">
                 Private
               </span>
