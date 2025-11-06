@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // Added AnimatePresence
 import Head from 'next/head';
 import Link from 'next/link';
-import { Zap, Shield, Activity, ArrowRight, Wallet, Cpu } from 'lucide-react';
+import { Zap, Shield, Activity, ArrowRight, Wallet, Cpu, Bot, Menu, X } from 'lucide-react'; // Added Menu, X
 import LiveFeed from '../components/LiveFeed';
-import { Twitter } from 'lucide-react';
 
 export default function Home() {
   const [agents, setAgents] = useState([]);
   const [stats, setStats] = useState({ total: 0, active: 0, paused: 0, private: 0, verified: 0, pending: 0 });
   const [connectedWallet, setConnectedWallet] = useState<string | null>(null);
+  
+  // --- NEW: State for mobile menu ---
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // --- END NEW ---
 
-  // Fetch agents data
   useEffect(() => {
     const fetchAgents = async () => {
       try {
@@ -25,17 +27,14 @@ export default function Home() {
     };
 
     fetchAgents();
-    const interval = setInterval(fetchAgents, 3000); // Update every 3 seconds
+    const interval = setInterval(fetchAgents, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  // Simulate wallet connection
   const connectWallet = () => {
-    // Mock wallet connection
     setConnectedWallet('0x9A...B2C3');
-    // Generate mock ZK identity
     console.log('Mock ZK Identity Generated:', {
-      wallet: connectedWallet,
+      wallet: '0x9A...B2C3',
       zkHash: '0x1a2b3c4d5e6f7890abcdef1234567890abcdef12',
       privacyLevel: 'verified'
     });
@@ -50,17 +49,72 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      {/* --- NEW: Mobile Menu Overlay --- */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: "-100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "-100%" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-0 bg-monochrome-0 z-50 p-6 flex flex-col"
+          >
+            {/* Mobile Menu Header */}
+            <div className="flex items-center justify-between mb-24">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-monochrome-4 rounded-lg flex items-center justify-center">
+                  <Zap className="w-5 h-5 text-monochrome-0" />
+                </div>
+                <span className="text-xl font-bold text-monochrome-4">ZKWhale.AI</span>
+              </div>
+              <button onClick={() => setIsMenuOpen(false)}>
+                <X className="w-6 h-6 text-monochrome-4" />
+              </button>
+            </div>
+
+            {/* Mobile Menu Links */}
+            <div className="flex flex-col items-center justify-center space-y-10">
+              <Link
+                href="/dashboard"
+                className="text-3xl font-bold text-monochrome-3 hover:text-monochrome-4 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/create"
+                className="text-3xl font-bold text-monochrome-3 hover:text-monochrome-4 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Deploy Agent
+              </Link>
+              <Link
+                href="/feature"
+                className="text-3xl font-bold text-monochrome-3 hover:text-monochrome-4 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Features
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* --- END NEW --- */}
+
+
       <div className="min-h-screen bg-monochrome-0 network-grid">
         {/* Header */}
         <header className="relative z-10 p-6">
           <nav className="max-w-7xl mx-auto flex items-center justify-between">
+            {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="rounded-lg flex items-center justify-center">
-                <img src="/logo.png" alt="ZKWhale.AI Logo" className="w-20 h-20" />
+              <div className="w-8 h-8 bg-monochrome-4 rounded-lg flex items-center justify-center">
+                <Zap className="w-5 h-5 text-monochrome-0" />
               </div>
-              <span className="hidden md:block text-xl font-bold text-monochrome-4">ZKWhale.AI</span>
+              <span className="text-xl font-bold text-monochrome-4">ZKWhale.AI</span>
             </div>
-
+            
+            {/* Desktop Nav Links */}
             <div className="hidden md:flex items-center space-x-8">
               <Link href="/dashboard" className="text-monochrome-3 hover:text-monochrome-4 transition-colors">
                 Dashboard
@@ -73,60 +127,36 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Right Section: Wallet + Social Links */}
+            {/* Wallet Button & Mobile Menu Toggle */}
             <div className="flex items-center space-x-4">
-              {/* GitHub Link */}
-              <a
-                href="https://github.com/Demerzels-lab/zkwhale-ai-enhanced"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-monochrome-3 hover:text-monochrome-4 transition-colors"
-                aria-label="GitHub"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.49.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.603-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.461-1.11-1.461-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.528 2.341 1.087 2.91.832.092-.647.35-1.087.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.983 1.03-2.682-.103-.253-.447-1.27.098-2.647 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.8c.85.004 1.705.115 2.504.337 1.91-1.296 2.75-1.026 2.75-1.026.545 1.377.2 2.394.098 2.647.64.7 1.03 1.591 1.03 2.682 0 3.841-2.337 4.687-4.565 4.937.36.31.682.92.682 1.852 0 1.337-.012 2.417-.012 2.745 0 .268.18.579.688.481A10.002 10.002 0 0 0 22 12c0-5.523-4.477-10-10-10z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </a>
-
-              {/* X (Twitter) Link */}
-              <a
-                href="https://x.com/zkwhaleai"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-monochrome-3 hover:text-monochrome-4 transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-6 h-6" />
-              </a>
-
-              {/* Wallet Connection */}
+              {/* Wallet Button (visible on all screens) */}
               {!connectedWallet ? (
                 <button
                   onClick={connectWallet}
                   className="flex items-center space-x-2 px-4 py-2 bg-monochrome-1 hover:bg-monochrome-2 text-monochrome-4 hover:text-white rounded-lg transition-all duration-200 border border-monochrome-2/50 hover:border-monochrome-4/50"
                 >
                   <Wallet className="w-4 h-4" />
-                  <span>Connect Wallet</span>
+                  <span className='hidden sm:inline'>Connect Wallet</span>
                 </button>
               ) : (
                 <div className="flex items-center space-x-3">
                   <div className="flex items-center space-x-2 px-3 py-2 bg-green-500/10 border border-green-500/20 rounded-lg">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm text-green-400 font-mono">{connectedWallet}</span>
+                    <span className="text-sm text-green-400 font-mono hidden sm:inline">{connectedWallet}</span>
+                    <span className="text-sm text-green-400 font-mono sm:hidden">{connectedWallet.slice(0, 6)}...</span>
                   </div>
-                  <span className="text-xs text-green-400">ZK Identity Verified</span>
+                  <span className="text-xs text-green-400 hidden lg:inline">ZK Identity Verified</span>
                 </div>
               )}
+
+              <button 
+                className="md:hidden p-1" 
+                onClick={() => setIsMenuOpen(true)}
+              >
+                <Menu className="w-6 h-6 text-monochrome-4" />
+              </button>
             </div>
+
           </nav>
         </header>
 
