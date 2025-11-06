@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { CheckCircle, Clock, Shield, Eye, Lock } from 'lucide-react'
-import { Agent } from '@/lib/agentsData'
+import { Agent } from '../lib/agentsData'
 
 interface AgentCardProps {
   agent: Agent
