@@ -7,17 +7,24 @@ import {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    // Get all agents with stats
-    const agents = getAgents()
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 12 
+    
+    const agents = getAgents() 
     const stats = getAgentStats()
     
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit
+    const pagedAgents = agents.slice(startIndex, endIndex)
+    
     res.status(200).json({
-      agents,
+      agents: pagedAgents, 
+      totalAgents: agents.length, 
       stats,
       timestamp: new Date().toISOString()
     })
+
   } else if (req.method === 'POST') {
-    // Update agent activity (for real-time simulation)
     const { agentId } = req.body
     
     if (agentId) {
