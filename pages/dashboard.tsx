@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowLeft, Filter, Bot, Plus, ChevronLeft, ChevronRight } from 'lucide-react' // Added new icons
+import { ArrowLeft, Filter, Bot, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
 import AgentCard from '@/components/AgentCard'
 import ProofModal from '@/components/ProofModal'
 import { Agent } from '@/lib/agentsData'
 
 type FilterType = 'all' | 'active' | 'paused' | 'private'
-const AGENTS_PER_PAGE = 12 // Set how many agents to show per page
+const AGENTS_PER_PAGE = 12 
 
-// FilterButton component moved outside for better performance
 const FilterButton = ({ type, label, count, activeFilter, setFilter }: { 
   type: FilterType, 
   label: string, 
@@ -33,9 +32,11 @@ export default function Dashboard() {
   const [allAgents, setAllAgents] = useState<Agent[]>([]) 
   const [filteredAgents, setFilteredAgents] = useState<Agent[]>([]) 
   const [pagedAgents, setPagedAgents] = useState<Agent[]>([]) 
+  
   const [filter, setFilter] = useState<FilterType>('all')
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  
   const [currentPage, setCurrentPage] = useState(1)
   const [totalAgents, setTotalAgents] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
@@ -86,7 +87,6 @@ export default function Dashboard() {
     return allAgents.filter(a => a.status === filterType).length
   }
 
-  // --- Pagination Handlers ---
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(prev => prev + 1)
@@ -115,7 +115,7 @@ export default function Dashboard() {
             <div className="h-6 w-px bg-gray-700" />
             <div className="flex items-center space-x-2">
               <Bot className="text-white" size={24} />
-              <h1 className="text-2xl font-bold text-text-gray">Agent Dashboard</h1>
+              <h1 className="hidden md:block text-2xl font-bold text-text-gray">Agent Dashboard</h1>
             </div>
           </div>
           <Link
@@ -127,9 +127,8 @@ export default function Dashboard() {
         </div>
 
         <>
-          {/* Stats and Actions */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-6">
+          <div className="flex flex-wrap items-center mb-8">
+            <div className="flex items-center space-x-4"> 
               <div className="bg-medium-gray p-4 rounded-xl">
                 <div className="text-2xl font-bold text-text-gray">{allAgents.length}</div>
                 <div className="text-sm text-gray-400">Total Agents</div>
@@ -147,18 +146,12 @@ export default function Dashboard() {
                 <div className="text-sm text-blue-400">Private</div>
               </div>
             </div>
-            <Link
-              href="/create"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-            >
-              <Plus size={18} />
-              <span>Deploy New Agent</span>
-            </Link>
           </div>
 
+
           {/* Filters */}
-          <div className="flex items-center space-x-4 mb-8">
-            <Filter className="text-gray-400" size={18} />
+          <div className="flex items-center space-x-4 mb-8 overflow-x-auto pb-2">
+            <Filter className="text-gray-400 flex-shrink-0" size={18} />
             <div className="flex space-x-2">
               <FilterButton type="all" label="All" count={getFilterCount('all')} activeFilter={filter} setFilter={setFilter} />
               <FilterButton type="active" label="Active" count={getFilterCount('active')} activeFilter={filter} setFilter={setFilter} />
@@ -201,7 +194,7 @@ export default function Dashboard() {
                     key={agent.agentId}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }} // Faster animation
+                    transition={{ delay: index * 0.05 }} 
                   >
                     <AgentCard
                       agent={agent}
