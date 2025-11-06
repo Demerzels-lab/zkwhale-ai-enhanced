@@ -74,7 +74,7 @@ const agentTemplates = [
     threats: ['Stealth operations'],
     proof: '0x890abcdef1234567890abcdef123456789'
   }
-] as const; // <-- THIS IS THE FIX. It makes all properties (like 'status') read-only literals.
+] as const; 
 
 // Generate random whale wallet addresses
 function generateWalletAddress(): string {
@@ -109,7 +109,7 @@ let agentCounter = 1
 // Initialize mock agents
 function initializeAgents() {
   agents = []
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 646; i++) {
     const template = agentTemplates[Math.floor(Math.random() * agentTemplates.length)]
     agents.push({
       agentId: generateAgentId(),
