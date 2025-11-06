@@ -57,7 +57,7 @@ export default function Home() {
             {/* Left Section: Logo */}
             <div className="flex items-center space-x-3">
               <div className="rounded-lg flex items-center justify-center">
-                <img src="/logo.jpeg" alt="ZKWhale.AI Logo" className="w-20 h-20" />
+                <img src="/logo.png" alt="ZKWhale.AI Logo" className="w-20 h-20" />
               </div>
               <span className="hidden md:block text-xl font-bold text-monochrome-4">ZKWhale.AI</span>
             </div>
@@ -293,7 +293,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6 text-center">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <div className="rounded-lg flex items-center justify-center">
-                <img src="/logo.jpeg" alt="ZKWhale.AI Logo" className="w-20 h-20" />
+                <img src="/logo.png" alt="ZKWhale.AI Logo" className="w-20 h-20" />
               </div>
               <span className="text-lg font-bold text-monochrome-4">ZKWhale.AI</span>
             </div>
