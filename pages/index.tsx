@@ -54,10 +54,10 @@ export default function Home() {
         <header className="relative z-10 p-6">
           <nav className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-monochrome-4 rounded-lg flex items-center justify-center">
-                <Zap className="w-5 h-5 text-monochrome-0" />
+              <div className="rounded-lg flex items-center justify-center">
+                <img src="/logo.jpeg" alt="ZKWhale.AI Logo" className="w-20 h-20" />
               </div>
-              <span className="text-xl font-bold text-monochrome-4">ZKWhale.AI</span>
+              <span className="hidden md:block text-xl font-bold text-monochrome-4">ZKWhale.AI</span>
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
@@ -252,8 +252,8 @@ export default function Home() {
         <footer className="relative z-10 border-t border-monochrome-2/20 py-12">
           <div className="max-w-7xl mx-auto px-6 text-center">
             <div className="flex items-center justify-center space-x-3 mb-4">
-              <div className="w-6 h-6 bg-monochrome-4 rounded-lg flex items-center justify-center">
-                <Zap className="w-4 h-4 text-monochrome-0" />
+              <div className="rounded-lg flex items-center justify-center">
+                <img src="/logo.jpeg" alt="ZKWhale.AI Logo" className="w-20 h-20" />
               </div>
               <span className="text-lg font-bold text-monochrome-4">ZKWhale.AI</span>
             </div>
