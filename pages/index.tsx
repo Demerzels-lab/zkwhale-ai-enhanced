@@ -54,7 +54,6 @@ export default function Home() {
         {/* Header */}
         <header className="relative z-10 p-6">
           <nav className="max-w-7xl mx-auto flex items-center justify-between">
-            {/* Left Section: Logo */}
             <div className="flex items-center space-x-3">
               <div className="rounded-lg flex items-center justify-center">
                 <img src="/logo.png" alt="ZKWhale.AI Logo" className="w-20 h-20" />
@@ -62,7 +61,6 @@ export default function Home() {
               <span className="hidden md:block text-xl font-bold text-monochrome-4">ZKWhale.AI</span>
             </div>
 
-            {/* Middle Section: Navigation Links */}
             <div className="hidden md:flex items-center space-x-8">
               <Link href="/dashboard" className="text-monochrome-3 hover:text-monochrome-4 transition-colors">
                 Dashboard
@@ -70,9 +68,9 @@ export default function Home() {
               <Link href="/create" className="text-monochrome-3 hover:text-monochrome-4 transition-colors">
                 Deploy Agent
               </Link>
-              <a href="#features" className="text-monochrome-3 hover:text-monochrome-4 transition-colors">
+              <Link href="/feature" className="text-monochrome-3 hover:text-monochrome-4 transition-colors">
                 Features
-              </a>
+              </Link>
             </div>
 
             {/* Right Section: Wallet + Social Links */}
