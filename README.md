@@ -1,21 +1,21 @@
 # ZKWhale.AI
 
-🚀 **Stealth intelligence network of AI agents that monitor whale wallet movements in the Axiom ecosystem**
+**Stealth intelligence network of AI agents that monitor whale wallet movements in the Axiom ecosystem**
 
 🔗 **Repository**: [https://github.com/Demerzels-lab/zkwhale-ai](https://github.com/Demerzels-lab/zkwhale-ai)
 
 ZKWhale.AI is a cutting-edge platform where users can deploy private AI agents to track whale wallet activities on Axiom, using Zero-Knowledge proofs for privacy and verifiable analytics.
 
-## 🌟 Features
+## Features
 
-- **🤖 AI Agent Deployment**: Create and deploy private AI agents to monitor specific tokens and whale thresholds
-- **🔐 Zero-Knowledge Privacy**: All agent activities protected with ZK proofs for complete privacy
-- **📊 Real-time Monitoring**: Live feed of agent activities with cryptographic verification
-- **💼 Agent Dashboard**: Comprehensive dashboard to manage your AI agents
-- **🔗 Wallet Integration**: Connect your wallet seamlessly with RainbowKit
-- **⚡ Real-time Updates**: Live agent activity feed with smooth animations
+- **AI Agent Deployment**: Create and deploy private AI agents to monitor specific tokens and whale thresholds
+- **Zero-Knowledge Privacy**: All agent activities protected with ZK proofs for complete privacy
+- **Real-time Monitoring**: Live feed of agent activities with cryptographic verification
+- **Agent Dashboard**: Comprehensive dashboard to manage your AI agents
+- **Wallet Integration**: Connect your wallet seamlessly with RainbowKit
+- **Real-time Updates**: Live agent activity feed with smooth animations
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend**: Next.js, React, TypeScript
 - **Styling**: TailwindCSS with custom monochrome theme
@@ -24,7 +24,7 @@ ZKWhale.AI is a cutting-edge platform where users can deploy private AI agents t
 - **Icons**: Lucide React
 - **APIs**: Next.js API Routes with mock data
 
-## 🎨 Design
+## Design
 
 - **Monochrome Futurism**: Dark theme with gradients and glow effects
 - **Glassmorphism**: Modern glass-like UI elements
@@ -32,7 +32,7 @@ ZKWhale.AI is a cutting-edge platform where users can deploy private AI agents t
 - **Real-time Feel**: Live agent feed with typing effects
 - **ZK Verification**: Cryptographic proof badges and modals
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 zkwhale-ai/
@@ -53,7 +53,7 @@ zkwhale-ai/
     └── globals.css        # Global styles + animations
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 1. **Clone the repository**
    ```bash
@@ -74,7 +74,7 @@ zkwhale-ai/
 4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 🌐 Live Demo
+## Live Demo
 
 The website is configured for deployment on Vercel and includes:
 - Real-time AI agent feed
@@ -82,7 +82,7 @@ The website is configured for deployment on Vercel and includes:
 - Agent deployment and management
 - ZK proof verification (mock implementation)
 
-## 📱 Key Components
+## Key Components
 
 ### Home Page (`/`)
 - Hero section with animated agent counter
@@ -109,14 +109,14 @@ The website is configured for deployment on Vercel and includes:
 - ZK proof verification badges
 - Animated terminal-style interface
 
-## 🔐 ZK Integration
+## ZK Integration
 
 - Mock ZK proof generation and verification
 - Cryptographic hash display
 - Privacy-preserving agent operations
 - Zero-knowledge verification modals
 
-## 🎯 Future Enhancements
+## Future Enhancements
 
 - Real Axiom blockchain integration
 - Actual ZK proof implementation with libraries like Circom
@@ -125,11 +125,11 @@ The website is configured for deployment on Vercel and includes:
 - Multi-chain support
 - Enterprise dashboard features
 
-## 🌐 Deployment
+## Deployment
 
 Ready for deployment on Vercel, Netlify, or any Next.js-compatible platform.
 
-## 📄 License
+## License
 
 This project is private and proprietary.
 
