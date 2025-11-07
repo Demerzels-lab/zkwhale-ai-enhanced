@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion'; // Added AnimatePresence
 import Head from 'next/head';
 import Link from 'next/link';
-import { Zap, Shield, Activity, ArrowRight, Wallet, Cpu, Bot, Menu, X } from 'lucide-react'; // Added Menu, X
+import { Zap, Shield, Activity, ArrowRight, Wallet, Cpu, Bot, Menu, X, Twitter } from 'lucide-react'; // Added Menu, X
 import LiveFeed from '../components/LiveFeed';
 
 export default function Home() {
@@ -106,15 +106,13 @@ export default function Home() {
         {/* Header */}
         <header className="relative z-10 p-6">
           <nav className="max-w-7xl mx-auto flex items-center justify-between">
-            {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-monochrome-4 rounded-lg flex items-center justify-center">
-                <Zap className="w-5 h-5 text-monochrome-0" />
+              <div className="rounded-lg flex items-center justify-center">
+                <img src="/logo.png" alt="ZKWhale.AI Logo" className="w-10 h-10" />
               </div>
-              <span className="text-xl font-bold text-monochrome-4">ZKWhale.AI</span>
+              <span className="hidden md:block text-xl font-bold text-monochrome-4">ZKWhale.AI</span>
             </div>
-            
-            {/* Desktop Nav Links */}
+
             <div className="hidden md:flex items-center space-x-8">
               <Link href="/dashboard" className="text-monochrome-3 hover:text-monochrome-4 transition-colors">
                 Dashboard
@@ -127,9 +125,31 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Wallet Button & Mobile Menu Toggle */}
+            {/* Right Section: Social + Wallet */}
             <div className="flex items-center space-x-4">
-              {/* Wallet Button (visible on all screens) */}
+              <a
+                href="https://github.com/Demerzels-lab/zkwhale-ai-enhanced"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-monochrome-3 hover:text-monochrome-4 transition-colors"
+                aria-label="GitHub"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.49.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.603-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.461-1.11-1.461-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.528 2.341 1.087 2.91.832.092-.647.35-1.087.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.983 1.03-2.682-.103-.253-.447-1.27.098-2.647 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.8c.85.004 1.705.115 2.504.337 1.91-1.296 2.75-1.026 2.75-1.026.545 1.377.2 2.394.098 2.647.64.7 1.03 1.591 1.03 2.682 0 3.841-2.337 4.687-4.565 4.937.36.31.682.92.682 1.852 0 1.337-.012 2.417-.012 2.745 0 .268.18.579.688.481A10.002 10.002 0 0 0 22 12c0-5.523-4.477-10-10-10z" clipRule="evenodd"/>
+                </svg>
+              </a>
+
+              <a
+                href="https://x.com/zkwhaleai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-monochrome-3 hover:text-monochrome-4 transition-colors"
+                aria-label="X"
+              >
+                <Twitter className="w-6 h-6" />
+              </a>
+
+              {/* Wallet Button (existing) */}
               {!connectedWallet ? (
                 <button
                   onClick={connectWallet}
@@ -156,7 +176,6 @@ export default function Home() {
                 <Menu className="w-6 h-6 text-monochrome-4" />
               </button>
             </div>
-
           </nav>
         </header>
 

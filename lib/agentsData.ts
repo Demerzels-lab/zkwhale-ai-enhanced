@@ -109,18 +109,18 @@ let agentCounter = 1
 // Initialize mock agents
 function initializeAgents() {
   agents = []
-  for (let i = 0; i < 646; i++) {
+  for (let i = 0; i < 1654; i++) {
     const template = agentTemplates[Math.floor(Math.random() * agentTemplates.length)]
     agents.push({
       agentId: generateAgentId(),
-      status: template.status, // <-- This line now works because template.status is typed correctly
+      status: template.status, 
       activity: template.activity,
       wallet: generateWalletAddress(),
       protocol: template.protocol,
       amount: generateAmount(),
       zkProof: template.proof,
       timestamp: new Date().toISOString(),
-      threats: [...template.threats], // Use spread operator to make a new array
+      threats: [...template.threats], 
       threatLevel: Math.floor(Math.random() * 10) + 1,
       verificationStatus: Math.random() > 0.8 ? 'pending' : 'verified'
     })
@@ -241,14 +241,14 @@ export const generateMockAgent = (userCreated = false): Agent => {
   const template = agentTemplates[Math.floor(Math.random() * agentTemplates.length)]
   return {
     agentId: generateAgentId(),
-    status: template.status, // <-- This line is now also fixed
+    status: template.status,
     activity: template.activity,
     wallet: generateWalletAddress(),
     protocol: template.protocol,
     amount: generateAmount(),
     zkProof: template.proof,
     timestamp: new Date().toISOString(),
-    threats: [...template.threats], // Use spread operator
+    threats: [...template.threats], 
     threatLevel: Math.floor(Math.random() * 10) + 1,
     verificationStatus: Math.random() > 0.8 ? 'pending' : 'verified'
   }
